@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Produk - UniMart</title>
+    <style>
+        /* CSS Reset & Basic Styling */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            background-color: #f4f6f8;
+            color: #1c1c1e;
+        }
+
+        /* Header */
+        header {
+            background-color: #ffffff;
+            padding: 15px 20px;
+            border-bottom: 1px solid #e5e5e5;
+            display: flex;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        header .back-button {
+            font-size: 24px;
+            font-weight: bold;
+            text-decoration: none;
+            color: #007aff;
+            margin-right: 15px;
+        }
+        header .title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        /* Main Content Wrapper */
+        .container {
+            padding-bottom: 100px; /* Ruang untuk tombol sticky di bawah */
+        }
+        
+        /* Product Image Gallery */
+        .image-gallery {
+            width: 100%;
+            height: 300px;
+            background-color: #e5e5e5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .image-gallery img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Product Info Section */
+        .product-details {
+            background-color: #ffffff;
+            padding: 20px;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            margin-bottom: 12px;
+        }
+        .product-price {
+            font-size: 28px;
+            font-weight: bold;
+            color: #007aff;
+            margin-bottom: 8px;
+        }
+        .product-name {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        /* Seller Info Section */
+        .seller-info {
+            background-color: #ffffff;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .seller-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #ddd;
+            margin-right: 15px;
+        }
+        .seller-name {
+            font-weight: 600;
+        }
+        .seller-university {
+            font-size: 14px;
+            color: #8e8e93;
+        }
+
+        /* Description Section */
+        .description {
+            background-color: #ffffff;
+            padding: 20px;
+        }
+        .description h3 {
+            font-size: 18px;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+        .description p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #3c3c43;
+        }
+
+        /* Sticky Action Footer */
+        .action-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #ffffff;
+            padding: 15px 20px;
+            border-top: 1px solid #e5e5e5;
+            display: flex;
+            gap: 15px;
+        }
+        .btn {
+            flex: 1;
+            padding: 15px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+        }
+        .btn-secondary {
+            background-color: #e5f2ff;
+            color: #007aff;
+            border: 1px solid #007aff;
+        }
+        .btn-primary {
+            background-color: #007aff;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="back-button">‹</a>
+        <div class="title">Detail Produk</div>
+    </header>
+
+    <main class="container">
+        <div class="image-gallery">
+            <img src="https://via.placeholder.com/375x300" alt="Gambar Produk">
+        </div>
+
+        <section class="product-details">
+            <div class="product-price">Rp 2.800.000</div>
+            <div class="product-name">Laptop Thinkpad X270 Mulus Siap Pakai</div>
+        </section>
+
+        <section class="seller-info">
+            <div class="seller-avatar"></div>
+            <div>
+                <div class="seller-name">Kievlan Hakim</div>
+                <div class="seller-university">Univ. Gadjah Mada</div>
+            </div>
+        </section>
+
+        <section class="description">
+            <h3>Deskripsi Produk</h3>
+            <p>
+                Dijual laptop Thinkpad X270 kondisi sangat baik, cocok untuk mahasiswa Informatika. Baterai awet 4-5 jam.
+                <br><br>
+                <strong>Spesifikasi:</strong><br>
+                - Core i5 Gen 7<br>
+                - RAM 8GB<br>
+                - SSD 256GB<br>
+                - Kondisi: Bekas (95% mulus)
+            </p>
+        </section>
+
+    </main>
+
+    <footer class="action-footer">
+        <button class="btn btn-secondary">Tawar</button>
+        <button class="btn btn-primary">Tambah ke Keranjang</button>
+    </footer>
+
+</body>
+</html>

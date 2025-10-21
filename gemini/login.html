@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - UniMart</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            background-color: #f4f6f8;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .container {
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .logo {
+            font-size: 36px;
+            font-weight: bold;
+            color: #007aff;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            font-size: 16px;
+            border-radius: 12px;
+            border: 1px solid #dcdcdc;
+            box-sizing: border-box;
+        }
+        .btn-login {
+            width: 100%;
+            padding: 15px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            background-color: #007aff;
+            color: #ffffff;
+            margin-top: 10px;
+        }
+        .forgot-password {
+            text-align: right;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        .forgot-password a {
+            color: #007aff;
+            text-decoration: none;
+        }
+        .register-link {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 15px;
+            color: #8e8e93;
+        }
+        .register-link a {
+            color: #007aff;
+            text-decoration: none;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="logo">UniMart</div>
+
+        <form>
+            <div class="form-group">
+                <label for="email">Email Universitas</label>
+                <input type="email" id="email" placeholder="Masukkan email terdaftarmu">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Masukkan passwordmu">
+            </div>
+            <div class="forgot-password">
+                <a href="#">Lupa Password?</a>
+            </div>
+
+            <button type="submit" class="btn-login">Login</button>
+        </form>
+
+        <div class="register-link">
+            Belum punya akun? <a href="daftar.html">Daftar di sini</a>
+        </div>
+    </div>
+
+</body>
+</html>

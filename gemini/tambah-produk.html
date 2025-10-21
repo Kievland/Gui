@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tambah Produk Baru - UniMart</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            background-color: #f4f6f8;
+            color: #1c1c1e;
+        }
+
+        header {
+            background-color: #ffffff;
+            padding: 15px 20px;
+            border-bottom: 1px solid #e5e5e5;
+            display: flex;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        header .back-button {
+            font-size: 24px;
+            font-weight: bold;
+            text-decoration: none;
+            color: #007aff;
+            margin-right: 15px;
+        }
+        header .title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .container {
+            padding: 20px;
+            padding-bottom: 100px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #333;
+            font-size: 16px;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            font-size: 16px;
+            border-radius: 12px;
+            border: 1px solid #dcdcdc;
+            box-sizing: border-box;
+            background-color: #fff;
+        }
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .radio-group {
+            display: flex;
+            gap: 15px;
+        }
+        .radio-group input[type="radio"] {
+            display: none;
+        }
+        .radio-label {
+            flex: 1;
+            text-align: center;
+            padding: 15px;
+            border: 1px solid #dcdcdc;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+        .radio-group input[type="radio"]:checked + .radio-label {
+            border-color: #007aff;
+            background-color: #e5f2ff;
+            font-weight: 600;
+        }
+
+        .upload-btn {
+            display: inline-block;
+            padding: 15px 25px;
+            background-color: #e5e5e5;
+            color: #333;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .footer-action {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #ffffff;
+            padding: 15px 20px;
+            border-top: 1px solid #e5e5e5;
+        }
+        .btn-save {
+            width: 100%;
+            padding: 15px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            background-color: #007aff;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="#" class="back-button">‹</a>
+        <div class="title">Tambah Produk Baru</div>
+    </header>
+
+    <main class="container">
+        <form>
+            <div class="form-group">
+                <label for="nama-produk">Nama Produk</label>
+                <input type="text" id="nama-produk" placeholder="Contoh: Buku Kalkulus Lanjut">
+            </div>
+
+            <div class="form-group">
+                <label for="harga">Harga</label>
+                <input type="number" id="harga" placeholder="Contoh: 75000">
+            </div>
+
+            <div class="form-group">
+                <label for="kategori">Kategori</label>
+                <select id="kategori">
+                    <option value="">Pilih Kategori</option>
+                    <option value="buku">Buku Bekas</option>
+                    <option value="alat">Alat Tulis</option>
+                    <option value="gadget">Gadget & Elektronik</option>
+                    <option value="jasa">Jasa</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Kondisi Barang</label>
+                <div class="radio-group">
+                    <input type="radio" id="baru" name="kondisi" checked>
+                    <label for="baru" class="radio-label">Baru</label>
+                    <input type="radio" id="bekas" name="kondisi">
+                    <label for="bekas" class="radio-label">Bekas</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="deskripsi">Deskripsi</label>
+                <textarea id="deskripsi" placeholder="Jelaskan detail produkmu di sini..." style="font-family: 'Courier New', Courier, monospace;"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>Foto Produk</label>
+                <label for="foto" class="upload-btn">Unggah Foto</label>
+                <input type="file" id="foto" style="display:none;" multiple>
+            </div>
+        </form>
+    </main>
+
+    <footer class="footer-action">
+        <button class="btn-save">Simpan Produk</button>
+    </footer>
+
+</body>
+</html>
