@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniMart - Marketplace Kebutuhan Kampus</title>
+    <style>
+        /* DESIGN SYSTEM UNIMART */
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #10b981;
+            --accent: #f59e0b;
+            --text-dark: #1f2937;
+            --text-light: #6b7280;
+            --background: #f8fafc;
+            --white: #ffffff;
+            --border: #e2e8f0;
+            --card-bg: #ffffff;
+            --success: #10b981;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--background);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+        
+        /* NAVIGATION BAR */
+        .navbar {
+            background: var(--white);
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .search-bar {
+            flex: 1;
+            max-width: 500px;
+            margin: 0 2rem;
+            position: relative;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 3rem;
+            border: 2px solid var(--border);
+            border-radius: 25px;
+            font-size: 0.95rem;
+            background: var(--background);
+            transition: all 0.3s ease;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+        }
+        
+        .nav-icons {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+        
+        .nav-icon {
+            position: relative;
+            color: var(--text-dark);
+            text-decoration: none;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-icon:hover {
+            background: var(--background);
+            color: var(--primary);
+        }
+        
+        .icon-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--accent);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* HERO SECTION */
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+        }
+        
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+        
+        .hero-title {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+        
+        .hero-search {
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .hero-search-input {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .hero-search-input:focus {
+            outline: none;
+        }
+        
+        /* CATEGORIES SECTION */
+        .categories-section {
+            padding: 3rem 0;
+            background: var(--white);
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            color: var(--text-dark);
+        }
+        
+        .categories-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .category-card {
+            background: var(--card-bg);
+            padding: 1.5rem 1rem;
+            border-radius: 12px;
+            text-align: center;
+            text-decoration: none;
+            color: var(--text-dark);
+            transition: all 0.3s ease;
+            border: 2px solid var(--border);
+        }
+        
+        .category-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .category-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+        
+        .category-name {
+            font-weight: 500;
+        }
+        
+        /* FEATURED PRODUCTS */
+        .products-section {
+            padding: 3rem 0;
+            background: var(--background);
+        }
+        
+        .products-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+        
+        .product-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+        
+        .product-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(45deg, #e2e8f0, #f1f5f9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        .product-info {
+            padding: 1.5rem;
+        }
+        
+        .product-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .product-price {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .product-seller {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        
+        .product-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .product-rating {
+            color: var(--accent);
+            font-weight: 500;
+        }
+        
+        .product-location {
+            color: var(--text-light);
+            font-size: 0.8rem;
+        }
+        
+        /* CAMPUS PROMO BANNER */
+        .promo-banner {
+            background: linear-gradient(135deg, var(--secondary) 0%, #059669 100%);
+            color: white;
+            padding: 2rem;
+            margin: 2rem auto;
+            max-width: 1200px;
+            border-radius: 16px;
+            text-align: center;
+        }
+        
+        .promo-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* FOOTER */
+        .footer {
+            background: var(--text-dark);
+            color: white;
+            padding: 3rem 0 1rem;
+            margin-top: 3rem;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer-links a {
+            color: #d1d5db;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .copyright {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #374151;
+            color: #9ca3af;
+        }
+        
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-wrap: wrap;
+            }
+            
+            .search-bar {
+                order: 3;
+                margin: 1rem 0 0;
+                max-width: 100%;
+            }
+            
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .categories-grid {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVIGATION BAR -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">UniMart</a>
+            
+            <div class="search-bar">
+                <div class="search-icon">🔍</div>
+                <input type="text" class="search-input" placeholder="Cari buku, laptop, alat tulis...">
+            </div>
+            
+            <div class="nav-icons">
+                <a href="#" class="nav-icon">
+                    <h2>Home</h2>
+                </a>
+                <a href="#" class="nav-icon">
+                    <h2>Wishlist</h2>
+                </a>
+                <a href="#" class="nav-icon">
+                    <h2>Chat</h2>
+                </a>
+                <a href="#" class="nav-icon">
+                    <h2>Profil  </h2>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title">Cari Kebutuhan Kampus di UniMart</h1>
+            <p class="hero-subtitle">Marketplace khusus mahasiswa - jual beli buku, laptop, alat tulis, dan kebutuhan kampus lainnya</p>
+            
+            <div class="hero-search">
+                <input type="text" class="hero-search-input" placeholder="Contoh: Buku Kalkulus, Laptop Gaming, Jaket Kampus...">
+            </div>
+        </div>
+    </section>
+
+    <!-- CATEGORIES SECTION -->
+    <section class="categories-section">
+        <h2 class="section-title">Kategori Populer</h2>
+        <div class="categories-grid">
+            <a href="#" class="category-card">
+                <div class="category-icon">📚</div>
+                <div class="category-name">Buku & E-Book</div>
+            </a>
+            <a href="#" class="category-card">
+                <div class="category-icon">💻</div>
+                <div class="category-name">Laptop & Gadget</div>
+            </a>
+            <a href="#" class="category-card">
+                <div class="category-icon">👕</div>
+                <div class="category-name">Pakaian</div>
+            </a>
+            <a href="#" class="category-card">
+                <div class="category-icon">✏️</div>
+                <div class="category-name">Alat Tulis</div>
+            </a>
+            <a href="#" class="category-card">
+                <div class="category-icon">🔬</div>
+                <div class="category-name">Peralatan Lab</div>
+            </a>
+            <a href="#" class="category-card">
+                <div class="category-icon">🎓</div>
+                <div class="category-name">Aksesoris</div>
+            </a>
+            <a href="#" class="category-card">
+                <div class="category-icon">🛠️</div>
+                <div class="category-name">Jasa</div>
+            </a>
+            <a href="#" class="category-card">
+                <div class="category-icon">🔍</div>
+                <div class="category-name">Lainnya</div>
+            </a>
+        </div>
+    </section>
+
+    <!-- FEATURED PRODUCTS -->
+    <section class="products-section">
+        <h2 class="section-title">Rekomendasi Untukmu</h2>
+        <div class="products-grid">
+            <!-- Product 1 -->
+            <a href="#" class="product-card">
+                <div class="product-image">
+                    [Gambar Buku Pemrograman]
+                </div>
+                <div class="product-info">
+                    <h3 class="product-title">Buku Pemrograman Java Edisi 2024</h3>
+                    <div class="product-price">Rp 85.000</div>
+                    <div class="product-seller">Oleh: Budi_SI2020</div>
+                    <div class="product-meta">
+                        <div class="product-rating">⭐ 4.8 (24)</div>
+                        <div class="product-location">Kampus A</div>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Product 2 -->
+            <a href="#" class="product-card">
+                <div class="product-image">
+                    [Gambar Laptop]
+                </div>
+                <div class="product-info">
+                    <h3 class="product-title">Laptop ASUS VivoBook i5 8GB</h3>
+                    <div class="product-price">Rp 4.500.000</div>
+                    <div class="product-seller">Oleh: Anita_TI2019</div>
+                    <div class="product-meta">
+                        <div class="product-rating">⭐ 4.9 (15)</div>
+                        <div class="product-location">Kampus B</div>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Product 3 -->
+            <a href="#" class="product-card">
+                <div class="product-image">
+                    [Gambar Kalkulator]
+                </div>
+                <div class="product-info">
+                    <h3 class="product-title">Kalkulator Scientific Casio fx-991EX</h3>
+                    <div class="product-price">Rp 320.000</div>
+                    <div class="product-seller">Oleh: Rizky_FT2021</div>
+                    <div class="product-meta">
+                        <div class="product-rating">⭐ 4.7 (31)</div>
+                        <div class="product-location">Kampus C</div>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Product 4 -->
+            <a href="#" class="product-card">
+                <div class="product-image">
+                    [Gambar Jaket Kampus]
+                </div>
+                <div class="product-info">
+                    <h3 class="product-title">Jaket Almamater Universitas X Size L</h3>
+                    <div class="product-price">Rp 120.000</div>
+                    <div class="product-seller">Oleh: Sari_FEB2020</div>
+                    <div class="product-meta">
+                        <div class="product-rating">⭐ 4.6 (42)</div>
+                        <div class="product-location">Kampus A</div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <!-- PROMO BANNER -->
+    <section class="promo-banner">
+        <div class="promo-content">
+            <h3 class="promo-title">🎓 Semester Bazaar Sedang Berlangsung!</h3>
+            <p>Diskon hingga 50% untuk semua produk buku dan alat tulis</p>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>UniMart</h3>
+                <p>Marketplace kebutuhan kampus terpercaya untuk mahasiswa seluruh Indonesia.</p>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Bantuan</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Cara Berjualan</a></li>
+                    <li><a href="#">Cara Membeli</a></li>
+                    <li><a href="#">Pusat Bantuan</a></li>
+                    <li><a href="#">Syarat & Ketentuan</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Kontak</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Email: support@unimart.ac.id</a></li>
+                    <li><a href="#">WhatsApp: +62 812-3456-7890</a></li>
+                    <li><a href="#">Instagram: @unimart.official</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            &copy; 2024 UniMart. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        // Simple interactive features
+        document.querySelectorAll('.product-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                e.preventDefault();
+                alert('Fitur detail produk akan ditampilkan di sini');
+            });
+        });
+        
+        document.querySelectorAll('.category-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                e.preventDefault();
+                const category = this.querySelector('.category-name').textContent;
+                alert(`Menampilkan produk kategori: ${category}`);
+            });
+        });
+    </script>
+</body>
+</html>

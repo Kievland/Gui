@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - UniMart</title>
+    <style>
+        /* DESIGN SYSTEM UNIMART */
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #10b981;
+            --accent: #f59e0b;
+            --text-dark: #1f2937;
+            --text-light: #6b7280;
+            --background: #f8fafc;
+            --white: #ffffff;
+            --border: #e2e8f0;
+            --card-bg: #ffffff;
+            --success: #10b981;
+            --error: #ef4444;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--background);
+            color: var(--text-dark);
+        }
+        
+        /* NAVIGATION BAR */
+        .navbar {
+            background: var(--white);
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .nav-icons {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+        
+        .nav-icon {
+            position: relative;
+            color: var(--text-dark);
+            text-decoration: none;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        /* CHECKOUT CONTAINER */
+        .checkout-container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        /* CHECKOUT PROGRESS */
+        .checkout-progress {
+            display: flex;
+            justify-content: space-between; /* Biar step 1, 2, 3 punya jarak sama */
+            margin-bottom: 3rem;
+            position: relative;
+            max-width: 700px; /* Biar ga terlalu melebar */
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--border);
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .step-label {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.active .step-number {
+            background: var(--primary);
+            color: white;
+        }
+
+        .progress-step.active .step-label {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .progress-step.completed .step-number {
+            background: var(--success);
+            color: white;
+        }
+
+        .progress-line {
+            position: absolute;
+            top: 20px;
+            left: 0;   /* full dari kiri */
+            right: 0;  /* full sampai kanan */
+            height: 2px;
+            background: var(--border);
+            z-index: 1;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            transition: all 0.3s ease;
+        }
+
+        /* CHECKOUT CONTENT */
+        .checkout-content {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 2rem;
+        }
+
+        /* CHECKOUT FORMS */
+        .checkout-form {
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+        }
+
+        .form-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            background: var(--white);
+            cursor: pointer;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .radio-option {
+            flex: 1;
+        }
+
+        .radio-input {
+            display: none;
+        }
+
+        .radio-label {
+            display: block;
+            padding: 1rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .radio-input:checked + .radio-label {
+            border-color: var(--primary);
+            background: rgba(37, 99, 235, 0.05);
+        }
+
+        .payment-method {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .payment-method.selected {
+            border-color: var(--primary);
+            background: rgba(37, 99, 235, 0.05);
+        }
+
+        .payment-icon {
+            font-size: 1.5rem;
+        }
+
+        .payment-details {
+            flex: 1;
+        }
+
+        .payment-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .payment-desc {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* ORDER SUMMARY */
+        .order-summary {
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+        }
+
+        .summary-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .order-items {
+            margin-bottom: 1.5rem;
+        }
+
+        .order-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .order-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-image {
+            width: 60px;
+            height: 80px;
+            background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-align: center;
+            padding: 0.5rem;
+        }
+
+        .python-book {
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+        }
+
+        .calculator {
+            background: linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%);
+        }
+
+        .item-details {
+            flex: 1;
+        }
+
+        .item-name {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+            font-size: 0.9rem;
+        }
+
+        .item-seller {
+            color: var(--text-light);
+            font-size: 0.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .item-price {
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 0.9rem;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+        }
+
+        .summary-label {
+            color: var(--text-light);
+        }
+
+        .summary-value {
+            font-weight: 500;
+        }
+
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            margin: 1.5rem 0;
+            padding-top: 1rem;
+            border-top: 2px solid var(--border);
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .total-label {
+            color: var(--text-dark);
+        }
+
+        .total-value {
+            color: var(--primary);
+        }
+
+        /* NAVIGATION BUTTONS */
+        .checkout-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .btn {
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-secondary {
+            background: var(--white);
+            color: var(--text-dark);
+            border: 2px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--background);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #0da271;
+            transform: translateY(-2px);
+        }
+
+        /* STEP CONTENT */
+        .step-content {
+            display: none;
+        }
+
+        .step-content.active {
+            display: block;
+        }
+
+        /* SHIPPING OPTIONS */
+        .shipping-option {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .shipping-option.selected {
+            border-color: var(--primary);
+            background: rgba(37, 99, 235, 0.05);
+        }
+
+        .shipping-details {
+            flex: 1;
+        }
+
+        .shipping-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .shipping-desc {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .shipping-price {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* PAYMENT SUCCESS */
+        .success-screen {
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            color: var(--success);
+            margin-bottom: 1rem;
+        }
+
+        .success-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--success);
+        }
+
+        .success-message {
+            color: var(--text-light);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .order-details {
+            background: var(--background);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+
+        .order-number {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .order-total {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 768px) {
+            .checkout-content {
+                grid-template-columns: 1fr;
+            }
+
+            .order-summary {
+                position: static;
+                margin-top: 2rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .checkout-progress {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+
+            .progress-line {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVIGATION BAR -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">UniMart</a>
+            
+            <div class="nav-icons">
+                <a href="#" class="nav-icon">🏠</a>
+                <a href="#" class="nav-icon">❤️</a>
+                <a href="#" class="nav-icon">💬</a>
+                <a href="#" class="nav-icon">👤</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- CHECKOUT CONTAINER -->
+    <div class="checkout-container">
+        <!-- CHECKOUT PROGRESS -->
+        <div class="checkout-progress">
+            <div class="progress-line">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            </div>
+            
+            <div class="progress-step active" data-step="1">
+                <div class="step-number">1</div>
+                <div class="step-label">Alamat & Pengiriman</div>
+            </div>
+            
+            <div class="progress-step" data-step="2">
+                <div class="step-number">2</div>
+                <div class="step-label">Pembayaran</div>
+            </div>
+            
+            <div class="progress-step" data-step="3">
+                <div class="step-number">3</div>
+                <div class="step-label">Selesai</div>
+            </div>
+        </div>
+
+        <!-- CHECKOUT CONTENT -->
+        <div class="checkout-content">
+            <!-- MAIN CHECKOUT FORMS -->
+            <div class="checkout-main">
+                <!-- STEP 1: SHIPPING ADDRESS -->
+                <div class="step-content active" id="step1">
+                    <div class="checkout-form">
+                        <h2 class="form-title">Alamat Pengiriman</h2>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Pilih Alamat</label>
+                            <div class="radio-group">
+                                <div class="radio-option">
+                                    <input type="radio" name="address" id="address1" class="radio-input" checked>
+                                    <label for="address1" class="radio-label">
+                                        <strong>Asrama Kampus A</strong><br>
+                                        Jl. Merdeka No. 123, Gedung Asrama B
+                                    </label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="address" id="address2" class="radio-input">
+                                    <label for="address2" class="radio-label">
+                                        <strong>Kost Pelajar</strong><br>
+                                        Jl. Pelajar No. 45, Kost Merdeka
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Metode Pengiriman</label>
+                            
+                            <div class="shipping-option selected">
+                                <input type="radio" name="shipping" checked>
+                                <div class="shipping-details">
+                                    <div class="shipping-name">Pickup di Kampus</div>
+                                    <div class="shipping-desc">Ambil langsung di titik meeting kampus</div>
+                                </div>
+                                <div class="shipping-price">GRATIS</div>
+                            </div>
+                            
+                            <div class="shipping-option">
+                                <input type="radio" name="shipping">
+                                <div class="shipping-details">
+                                    <div class="shipping-name">Kurir Kampus</div>
+                                    <div class="shipping-desc">Diantar ke alamat dalam kampus</div>
+                                </div>
+                                <div class="shipping-price">Rp 5.000</div>
+                            </div>
+                            
+                            <div class="shipping-option">
+                                <input type="radio" name="shipping">
+                                <div class="shipping-details">
+                                    <div class="shipping-name">Kurir Eksternal</div>
+                                    <div class="shipping-desc">GoSend / GrabExpress</div>
+                                </div>
+                                <div class="shipping-price">Rp 15.000</div>
+                            </div>
+                        </div>
+
+                        <div class="checkout-navigation">
+                            <a href="#" class="btn btn-secondary">← Kembali ke Keranjang</a>
+                            <button class="btn btn-primary" onclick="nextStep(2)">Lanjut ke Pembayaran →</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 2: PAYMENT -->
+                <div class="step-content" id="step2">
+                    <div class="checkout-form">
+                        <h2 class="form-title">Metode Pembayaran</h2>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Pilih Metode Pembayaran</label>
+                            
+                            <div class="payment-method selected">
+                                <div class="payment-icon">🏦</div>
+                                <div class="payment-details">
+                                    <div class="payment-name">Transfer Bank</div>
+                                    <div class="payment-desc">BCA, BNI, Mandiri, BRI</div>
+                                </div>
+                            </div>
+                            
+                            <div class="payment-method">
+                                <div class="payment-icon">📱</div>
+                                <div class="payment-details">
+                                    <div class="payment-name">E-Wallet</div>
+                                    <div class="payment-desc">Gopay, OVO, Dana, LinkAja</div>
+                                </div>
+                            </div>
+                            
+                            <div class="payment-method">
+                                <div class="payment-icon">💵</div>
+                                <div class="payment-details">
+                                    <div class="payment-name">COD (Cash on Delivery)</div>
+                                    <div class="payment-desc">Bayar ketika barang diterima</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="bank">Pilih Bank</label>
+                            <select class="form-select" id="bank">
+                                <option>Bank Central Asia (BCA)</option>
+                                <option>Bank Negara Indonesia (BNI)</option>
+                                <option>Bank Mandiri</option>
+                                <option>Bank Rakyat Indonesia (BRI)</option>
+                            </select>
+                        </div>
+
+                        <div class="order-details">
+                            <div class="summary-row">
+                                <span class="summary-label">Virtual Account</span>
+                                <span class="summary-value">8880 1234 5678 9012</span>
+                            </div>
+                            <div class="summary-row">
+                                <span class="summary-label">Total Pembayaran</span>
+                                <span class="summary-value">Rp 717.000</span>
+                            </div>
+                            <div class="summary-row">
+                                <span class="summary-label">Batas Waktu</span>
+                                <span class="summary-value">24 Jam</span>
+                            </div>
+                        </div>
+
+                        <div class="checkout-navigation">
+                            <button class="btn btn-secondary" onclick="prevStep(1)">← Kembali</button>
+                            <button class="btn btn-success" onclick="nextStep(3)">Konfirmasi Pembayaran →</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 3: SUCCESS -->
+                <div class="step-content" id="step3">
+                    <div class="checkout-form">
+                        <div class="success-screen">
+                            <div class="success-icon">✅</div>
+                            <h2 class="success-title">Pesanan Berhasil!</h2>
+                            <p class="success-message">
+                                Terima kasih telah berbelanja di UniMart. Pesanan Anda sedang diproses dan akan segera dikirim.
+                            </p>
+                            
+                            <div class="order-details">
+                                <div class="order-number">Nomor Pesanan: <strong>UNI2024123456</strong></div>
+                                <div class="order-total">Total: Rp 717.000</div>
+                                <div class="summary-row">
+                                    <span class="summary-label">Metode Pengiriman</span>
+                                    <span class="summary-value">Pickup di Kampus</span>
+                                </div>
+                                <div class="summary-row">
+                                    <span class="summary-label">Estimasi Sampai</span>
+                                    <span class="summary-value">1-2 Hari</span>
+                                </div>
+                            </div>
+
+                            <div class="checkout-navigation" style="justify-content: center; gap: 1rem;">
+                                <a href="#" class="btn btn-secondary">Lacak Pesanan</a>
+                                <a href="#" class="btn btn-primary">Kembali Berbelanja</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ORDER SUMMARY SIDEBAR -->
+            <div class="order-summary">
+                <h3 class="summary-title">Ringkasan Pesanan</h3>
+                
+                <div class="order-items">
+                    <div class="order-item">
+                        <div class="item-image java-book">CORE JAVA</div>
+                        <div class="item-details">
+                            <div class="item-name">Core Java Volume I</div>
+                            <div class="item-seller">Budi_SI2020</div>
+                            <div class="item-price">Rp 285.000</div>
+                        </div>
+                    </div>
+                    
+                    <div class="order-item">
+                        <div class="item-image python-book">PYTHON</div>
+                        <div class="item-details">
+                            <div class="item-name">Python Crash Course</div>
+                            <div class="item-seller">Anita_TI2019</div>
+                            <div class="item-price">Rp 95.000</div>
+                        </div>
+                    </div>
+                    
+                    <div class="order-item">
+                        <div class="item-image calculator">CASIO</div>
+                        <div class="item-details">
+                            <div class="item-name">Kalkulator Casio</div>
+                            <div class="item-seller">Rizky_FT2021</div>
+                            <div class="item-price">Rp 320.000</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="summary-row">
+                    <span class="summary-label">Subtotal</span>
+                    <span class="summary-value">Rp 700.000</span>
+                </div>
+                
+                <div class="summary-row">
+                    <span class="summary-label">Biaya Pengiriman</span>
+                    <span class="summary-value">Rp 0</span>
+                </div>
+                
+                <div class="summary-row">
+                    <span class="summary-label">Biaya Layanan</span>
+                    <span class="summary-value">Rp 2.000</span>
+                </div>
+                
+                <div class="summary-row">
+                    <span class="summary-label">Asuransi</span>
+                    <span class="summary-value">Rp 15.000</span>
+                </div>
+                
+                <div class="summary-total">
+                    <span class="total-label">Total</span>
+                    <span class="total-value">Rp 717.000</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+
+        function updateProgress() {
+            // Update progress steps
+            document.querySelectorAll('.progress-step').forEach(step => {
+                const stepNum = parseInt(step.dataset.step);
+                step.classList.remove('active', 'completed');
+                
+                if (stepNum < currentStep) {
+                    step.classList.add('completed');
+                } else if (stepNum === currentStep) {
+                    step.classList.add('active');
+                }
+            });
+
+            // Update progress bar
+            const progressFill = document.getElementById('progressFill');
+            const progressPercent = ((currentStep - 1) / 2) * 100;
+            progressFill.style.width = progressPercent + '%';
+        }
+
+        function nextStep(step) {
+            if (step === 2) {
+                // Validate step 1
+                const addressSelected = document.querySelector('input[name="address"]:checked');
+                const shippingSelected = document.querySelector('input[name="shipping"]:checked');
+                
+                if (!addressSelected || !shippingSelected) {
+                    alert('Harap pilih alamat dan metode pengiriman!');
+                    return;
+                }
+            }
+            
+            if (step === 3) {
+                // Validate step 2
+                const paymentSelected = document.querySelector('.payment-method.selected');
+                if (!paymentSelected) {
+                    alert('Harap pilih metode pembayaran!');
+                    return;
+                }
+            }
+
+            currentStep = step;
+            updateProgress();
+            showStep(step);
+        }
+
+        function prevStep(step) {
+            currentStep = step;
+            updateProgress();
+            showStep(step);
+        }
+
+        function showStep(step) {
+            // Hide all steps
+            document.querySelectorAll('.step-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Show current step
+            document.getElementById(`step${step}`).classList.add('active');
+        }
+
+        // Payment method selection
+        document.querySelectorAll('.payment-method').forEach(method => {
+            method.addEventListener('click', function() {
+                document.querySelectorAll('.payment-method').forEach(m => {
+                    m.classList.remove('selected');
+                });
+                this.classList.add('selected');
+            });
+        });
+
+        // Shipping option selection
+        document.querySelectorAll('.shipping-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.shipping-option').forEach(o => {
+                    o.classList.remove('selected');
+                });
+                this.classList.add('selected');
+            });
+        });
+
+        // Initialize
+        updateProgress();
+    </script>
+</body>
+</html>

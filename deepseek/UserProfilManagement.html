@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil Saya - UniMart</title>
+    <style>
+        /* DESIGN SYSTEM UNIMART */
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #10b981;
+            --accent: #f59e0b;
+            --text-dark: #1f2937;
+            --text-light: #6b7280;
+            --background: #f8fafc;
+            --white: #ffffff;
+            --border: #e2e8f0;
+            --card-bg: #ffffff;
+            --success: #10b981;
+            --error: #ef4444;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--background);
+            color: var(--text-dark);
+        }
+        
+        /* NAVIGATION BAR */
+        .navbar {
+            background: var(--white);
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .nav-icons {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+        
+        .nav-icon {
+            position: relative;
+            color: var(--text-dark);
+            text-decoration: none;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-icon.active {
+            color: var(--primary);
+            background: var(--background);
+        }
+
+        /* PROFILE CONTAINER */
+        .profile-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+        }
+
+        /* SIDEBAR NAVIGATION */
+        .profile-sidebar {
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .user-card {
+            text-align: center;
+            padding: 1.5rem 0;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 1rem;
+        }
+
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .user-name {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .user-role {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .user-rating {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        .sidebar-nav {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            color: var(--text-dark);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-link:hover {
+            background: var(--background);
+            color: var(--primary);
+        }
+
+        .nav-link.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .nav-icon {
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* PROFILE CONTENT */
+        .profile-content {
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .content-header {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border);
+            background: var(--background);
+        }
+
+        .content-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .content-subtitle {
+            color: var(--text-light);
+            margin-top: 0.25rem;
+        }
+
+        .content-body {
+            padding: 2rem;
+        }
+
+        /* PROFILE INFO SECTION */
+        .profile-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .info-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .info-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .info-value {
+            padding: 0.75rem 1rem;
+            background: var(--background);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            color: var(--text-dark);
+        }
+
+        .info-edit {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-top: 0.25rem;
+            display: inline-block;
+        }
+
+        .info-edit:hover {
+            text-decoration: underline;
+        }
+
+        /* STATS CARDS */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+
+        .stat-icon {
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+            opacity: 0.8;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* ORDER HISTORY */
+        .order-history {
+            margin-top: 2rem;
+        }
+
+        .order-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .order-item:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .order-image {
+            width: 60px;
+            height: 80px;
+            background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-align: center;
+            padding: 0.5rem;
+        }
+
+        .python-book {
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+        }
+
+        .calculator {
+            background: linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%);
+        }
+
+        .order-details {
+            flex: 1;
+        }
+
+        .order-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .order-meta {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .order-status {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-completed {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .status-processing {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--accent);
+        }
+
+        .status-shipped {
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--primary);
+        }
+
+        /* ADDRESS MANAGEMENT */
+        .address-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .address-card {
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .address-card.default {
+            border-color: var(--primary);
+            background: rgba(37, 99, 235, 0.05);
+        }
+
+        .address-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .address-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .address-type {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            background: var(--primary);
+            color: white;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .address-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            cursor: pointer;
+            padding: 0.25rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            color: var(--primary);
+            background: var(--background);
+        }
+
+        .address-content {
+            line-height: 1.6;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+        }
+
+        .address-contact {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* WISHLIST */
+        .wishlist-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .wishlist-card {
+            background: var(--white);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .wishlist-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .wishlist-image {
+            width: 100%;
+            height: 160px;
+            background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .wishlist-remove {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .wishlist-remove:hover {
+            background: var(--error);
+            color: white;
+        }
+
+        .wishlist-info {
+            padding: 1rem;
+        }
+
+        .wishlist-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+            font-size: 0.95rem;
+        }
+
+        .wishlist-price {
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .wishlist-seller {
+            color: var(--text-light);
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+        }
+
+        .wishlist-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            flex: 1;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-outline {
+            background: var(--white);
+            color: var(--text-dark);
+            border: 1px solid var(--border);
+        }
+
+        .btn-outline:hover {
+            background: var(--background);
+        }
+
+        /* SETTINGS */
+        .settings-section {
+            margin-bottom: 2rem;
+        }
+
+        .settings-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .toggle-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .toggle-label {
+            font-weight: 500;
+        }
+
+        .toggle-desc {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-top: 0.25rem;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .toggle-input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--border);
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        .toggle-input:checked + .toggle-slider {
+            background: var(--primary);
+        }
+
+        .toggle-input:checked + .toggle-slider:before {
+            transform: translateX(26px);
+        }
+
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 968px) {
+            .profile-container {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-sidebar {
+                position: static;
+            }
+
+            .profile-info {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-wrap: wrap;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .address-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .wishlist-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVIGATION BAR -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">UniMart</a>
+            
+            <div class="nav-icons">
+                <a href="#" class="nav-icon">🏠</a>
+                <a href="#" class="nav-icon">❤️</a>
+                <a href="#" class="nav-icon">💬</a>
+                <a href="#" class="nav-icon active">👤</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- PROFILE CONTAINER -->
+    <div class="profile-container">
+        <!-- SIDEBAR NAVIGATION -->
+        <div class="profile-sidebar">
+            <div class="user-card">
+                <div class="user-avatar">AS</div>
+                <div class="user-name">Ahmad Santoso</div>
+                <div class="user-role">Mahasiswa - Sistem Informasi 2021</div>
+                <div class="user-rating">
+                    ⭐ 4.8 • 12 Transaksi
+                </div>
+            </div>
+
+            <ul class="sidebar-nav">
+                <li class="nav-item">
+                    <a href="#profile" class="nav-link active">
+                        <span class="nav-icon">👤</span>
+                        Profil Saya
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#orders" class="nav-link">
+                        <span class="nav-icon">📦</span>
+                        Pesanan Saya
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#address" class="nav-link">
+                        <span class="nav-icon">📍</span>
+                        Alamat Saya
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#wishlist" class="nav-link">
+                        <span class="nav-icon">❤️</span>
+                        Wishlist
+                        <span style="margin-left: auto; background: var(--primary); color: white; padding: 0.1rem 0.4rem; border-radius: 10px; font-size: 0.8rem;">5</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#reviews" class="nav-link">
+                        <span class="nav-icon">⭐</span>
+                        Ulasan Saya
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#settings" class="nav-link">
+                        <span class="nav-icon">⚙️</span>
+                        Pengaturan
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#logout" class="nav-link" style="color: var(--error);">
+                        <span class="nav-icon">🚪</span>
+                        Keluar
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- PROFILE CONTENT -->
+        <div class="profile-content">
+            <!-- PROFILE INFO SECTION -->
+            <div class="content-section active" id="profile-content">
+                <div class="content-header">
+                    <h2 class="content-title">Profil Saya</h2>
+                    <div class="content-subtitle">Kelola informasi profil Anda untuk mengontrol, melindungi, dan mengamankan akun</div>
+                </div>
+
+                <div class="content-body">
+                    <!-- STATS CARDS -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">🛒</div>
+                            <div class="stat-number">12</div>
+                            <div class="stat-label">Total Pesanan</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">❤️</div>
+                            <div class="stat-number">5</div>
+                            <div class="stat-label">Wishlist</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">⭐</div>
+                            <div class="stat-number">4.8</div>
+                            <div class="stat-label">Rating Pembeli</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">👑</div>
+                            <div class="stat-number">Gold</div>
+                            <div class="stat-label">Member Status</div>
+                        </div>
+                    </div>
+
+                    <!-- PROFILE INFORMATION -->
+                    <div class="profile-info">
+                        <div>
+                            <div class="info-group">
+                                <label class="info-label">Nama Lengkap</label>
+                                <div class="info-value">Ahmad Santoso</div>
+                                <a href="#" class="info-edit">Edit</a>
+                            </div>
+                            <div class="info-group">
+                                <label class="info-label">Email</label>
+                                <div class="info-value">ahmad.santoso@univ.ac.id</div>
+                                <a href="#" class="info-edit">Edit</a>
+                            </div>
+                            <div class="info-group">
+                                <label class="info-label">Nomor Telepon</label>
+                                <div class="info-value">+62 812-3456-7890</div>
+                                <a href="#" class="info-edit">Edit</a>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="info-group">
+                                <label class="info-label">Universitas</label>
+                                <div class="info-value">Universitas Indonesia</div>
+                            </div>
+                            <div class="info-group">
+                                <label class="info-label">Program Studi</label>
+                                <div class="info-value">Sistem Informasi</div>
+                            </div>
+                            <div class="info-group">
+                                <label class="info-label">Angkatan</label>
+                                <div class="info-value">2021</div>
+                            </div>
+                            <div class="info-group">
+                                <label class="info-label">NIM</label>
+                                <div class="info-value">2101234567</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- RECENT ORDERS -->
+                    <div class="order-history">
+                        <h3 style="margin-bottom: 1rem;">Pesanan Terbaru</h3>
+                        <div class="order-item">
+                            <div class="order-image java-book">CORE JAVA</div>
+                            <div class="order-details">
+                                <div class="order-title">Core Java Volume I - Fundamentals</div>
+                                <div class="order-meta">Budi_SI2020 • 2 hari yang lalu</div>
+                                <span class="order-status status-completed">Selesai</span>
+                            </div>
+                        </div>
+                        <div class="order-item">
+                            <div class="order-image python-book">PYTHON</div>
+                            <div class="order-details">
+                                <div class="order-title">Python Crash Course 3rd Edition</div>
+                                <div class="order-meta">Anita_TI2019 • 1 minggu yang lalu</div>
+                                <span class="order-status status-shipped">Dikirim</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Navigation functionality
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove active class from all links
+                document.querySelectorAll('.nav-link').forEach(l => {
+                    l.classList.remove('active');
+                });
+                
+                // Add active class to clicked link
+                this.classList.add('active');
+                
+                // Here you would typically load the corresponding content
+                const target = this.getAttribute('href').substring(1);
+                alert(`Loading ${target} content...`);
+            });
+        });
+
+        // Toggle switches
+        document.querySelectorAll('.toggle-input').forEach(toggle => {
+            toggle.addEventListener('change', function() {
+                const label = this.closest('.toggle-group').querySelector('.toggle-label');
+                if (this.checked) {
+                    alert(`${label.textContent} diaktifkan`);
+                } else {
+                    alert(`${label.textContent} dinonaktifkan`);
+                }
+            });
+        });
+
+        // Wishlist remove buttons
+        document.querySelectorAll('.wishlist-remove').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const card = this.closest('.wishlist-card');
+                if (confirm('Hapus dari wishlist?')) {
+                    card.style.opacity = '0';
+                    setTimeout(() => {
+                        card.remove();
+                    }, 300);
+                }
+            });
+        });
+
+        // Edit profile links
+        document.querySelectorAll('.info-edit').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const label = this.previousElementSibling.previousElementSibling.textContent;
+                alert(`Membuka form edit: ${label}`);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat - Buyer Perspective</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+        
+        .container {
+            width: 900px;
+            height: 700px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            display: flex;
+            overflow: hidden;
+        }
+        
+        .sidebar {
+            width: 300px;
+            background: #f8f9fa;
+            border-right: 1px solid #e9ecef;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .sidebar-header {
+            padding: 25px;
+            background: white;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .profile-pic {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .user-info .name {
+            font-weight: bold;
+            font-size: 16px;
+            color: #2c3e50;
+        }
+        
+        .user-info .role {
+            font-size: 13px;
+            color: #7f8c8d;
+        }
+        
+        .chat-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px 0;
+        }
+        
+        .chat-item {
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            border-bottom: 1px solid #f1f3f4;
+            transition: background 0.2s;
+        }
+        
+        .chat-item:hover {
+            background: #e9ecef;
+        }
+        
+        .chat-item.active {
+            background: #e8f5e8;
+            border-right: 3px solid #4CAF50;
+        }
+        
+        .chat-item-pic {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: #bdc3c7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .chat-item-info {
+            flex: 1;
+        }
+        
+        .chat-item-name {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 4px;
+        }
+        
+        .chat-item-preview {
+            font-size: 13px;
+            color: #7f8c8d;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .chat-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .chat-header {
+            padding: 20px 30px;
+            background: white;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .chat-partner {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .partner-pic {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: #bdc3c7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .partner-info .name {
+            font-weight: bold;
+            font-size: 16px;
+            color: #2c3e50;
+        }
+        
+        .partner-info .status {
+            font-size: 13px;
+            color: #27ae60;
+        }
+        
+        .chat-actions {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .action-btn {
+            background: none;
+            border: none;
+            font-size: 18px;
+            color: #7f8c8d;
+            cursor: pointer;
+            padding: 5px;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+            background: #f8f9fa;
+        }
+        
+        .message {
+            margin-bottom: 20px;
+            display: flex;
+        }
+        
+        .message.other {
+            justify-content: flex-start;
+        }
+        
+        .message.own {
+            justify-content: flex-end;
+        }
+        
+        .message-content {
+            max-width: 500px;
+            padding: 15px 20px;
+            border-radius: 18px;
+            position: relative;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .message.other .message-content {
+            background: white;
+            border-top-left-radius: 5px;
+        }
+        
+        .message.own .message-content {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            border-top-right-radius: 5px;
+        }
+        
+        .message-time {
+            font-size: 12px;
+            margin-top: 8px;
+            opacity: 0.7;
+            text-align: right;
+        }
+        
+        .notification {
+            background: #e8f6e8;
+            border: 1px solid #a3d9a5;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 25px 0;
+            text-align: center;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .notification-title {
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 10px;
+            font-size: 15px;
+        }
+        
+        .notification-desc {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 15px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #495057;
+            border: 1px solid #dee2e6;
+        }
+        
+        .btn-secondary:hover {
+            background: #e9ecef;
+        }
+        
+        .btn-primary {
+            background: #2e7d32;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #1b5e20;
+        }
+        
+        .btn-success {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #45a049;
+        }
+        
+        .offer-card {
+            background: #fff9e6;
+            border: 1px solid #ffd966;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 25px auto;
+            max-width: 600px;
+        }
+        
+        .offer-header {
+            font-weight: bold;
+            color: #b38b00;
+            margin-bottom: 12px;
+            font-size: 15px;
+        }
+        
+        .offer-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .product-info .name {
+            font-weight: bold;
+            font-size: 15px;
+        }
+        
+        .product-info .store {
+            font-size: 13px;
+            color: #666;
+        }
+        
+        .price {
+            font-weight: bold;
+            color: #e74c3c;
+            font-size: 18px;
+        }
+        
+        .offer-expiry {
+            font-size: 12px;
+            color: #999;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .chat-input-area {
+            padding: 25px 30px;
+            background: white;
+            border-top: 1px solid #e9ecef;
+        }
+        
+        .input-group {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .price-input {
+            flex: 1;
+            padding: 15px 20px;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            font-size: 15px;
+            outline: none;
+            transition: border 0.2s;
+        }
+        
+        .price-input:focus {
+            border-color: #4CAF50;
+        }
+        
+        .send-btn {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 15px 30px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 15px;
+            transition: transform 0.2s;
+        }
+        
+        .send-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .input-hint {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-top: 8px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="user-profile">
+                    <div class="profile-pic">L</div>
+                    <div class="user-info">
+                        <div class="name">Lisa AK2021</div>
+                        <div class="role">Buyer</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chat-list">
+                <div class="chat-item active">
+                    <div class="chat-item-pic" style="background: #e74c3c;">T</div>
+                    <div class="chat-item-info">
+                        <div class="chat-item-name">Tenima Kathi</div>
+                        <div class="chat-item-preview">Bisa banget. Bisa ketemuan di perpustakaan...</div>
+                    </div>
+                </div>
+                
+                <div class="chat-item">
+                    <div class="chat-item-pic" style="background: #3498db;">B</div>
+                    <div class="chat-item-info">
+                        <div class="chat-item-name">Budi Store</div>
+                        <div class="chat-item-preview">Maaf harga tidak bisa nego lagi</div>
+                    </div>
+                </div>
+                
+                <div class="chat-item">
+                    <div class="chat-item-pic" style="background: #9b59b6;">M</div>
+                    <div class="chat-item-info">
+                        <div class="chat-item-name">Maju Jaya</div>
+                        <div class="chat-item-preview">Ready stock warna hitam</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Chat Area -->
+        <div class="chat-area">
+            <div class="chat-header">
+                <div class="chat-partner">
+                    <div class="partner-pic" style="background: #e74c3c;">T</div>
+                    <div class="partner-info">
+                        <div class="name">Tenima Kathi</div>
+                        <div class="status">Online</div>
+                    </div>
+                </div>
+                
+                <div class="chat-actions">
+                    <button class="action-btn">📞</button>
+                    <button class="action-btn">ⓘ</button>
+                    <button class="action-btn">⋮</button>
+                </div>
+            </div>
+            
+            <div class="chat-messages">
+                <!-- Pesan dari pembeli -->
+                <div class="message own">
+                    <div class="message-content">
+                        Tenima kathi sudah menbeli
+                        <div class="message-time">10 Jan, 10:18</div>
+                    </div>
+                </div>
+                
+                <div class="message own">
+                    <div class="message-content">
+                        Bisa nego harganya? Budget saya cuma 250
+                        <div class="message-time">10:18</div>
+                    </div>
+                </div>
+                
+                <!-- Pesan dari penjual -->
+                <div class="message other">
+                    <div class="message-content">
+                        Wah sızaki, ini hanga promo sudah diskom dari 325. Paling bisa 270
+                        <div class="message-time">10:20</div>
+                    </div>
+                </div>
+                
+                <!-- Notifikasi penawaran diterima -->
+                <div class="notification">
+                    <div class="notification-title">PENAWARAN DITERIMA</div>
+                    <div class="notification-desc">Penjual menerima tawaran Anda. Harga khusus berlaku untuk 24 jam.</div>
+                    <div class="action-buttons">
+                        <button class="btn btn-secondary">Tawar Lagi</button>
+                        <button class="btn btn-primary">Lanjutkan</button>
+                    </div>
+                </div>
+                
+                <!-- Pesan dari pembeli -->
+                <div class="message own">
+                    <div class="message-content">
+                        Oke deal! Bisa COD di kampus A?
+                        <div class="message-time">10:25</div>
+                    </div>
+                </div>
+                
+                <!-- Pesan dari penjual -->
+                <div class="message other">
+                    <div class="message-content">
+                        Bisa banget. Bisa ketemuan di perpustakaan kampus jam 13.00?
+                        <div class="message-time">10:26</div>
+                    </div>
+                </div>
+                
+                <!-- Card tawaran baru dari penjual -->
+                <div class="offer-card">
+                    <div class="offer-header">TAWARAN BARU DARI PENJUAL</div>
+                    <div class="offer-details">
+                        <div class="product-info">
+                            <div class="name">Y Telma</div>
+                            <div class="store">X Tokk</div>
+                        </div>
+                        <div class="price">Rp 260.000</div>
+                    </div>
+                    <div class="offer-expiry">Berlaku hingga 10:45</div>
+                    <div class="action-buttons">
+                        <button class="btn btn-success">Terima Tawaran</button>
+                        <button class="btn btn-primary">Tawar Balik</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chat-input-area">
+                <div class="input-group">
+                    <input type="text" class="price-input" placeholder="Rp Masukkan harga tawar...">
+                    <button class="send-btn">Tawarkan Harga</button>
+                </div>
+                <div class="input-hint">Tekan Enter untuk mengirim penawaran</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

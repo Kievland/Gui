@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complaint & Dispute Form</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 30px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .page-title {
+            font-size: 36px;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .page-subtitle {
+            color: rgba(255,255,255,0.8);
+            font-size: 16px;
+        }
+        
+        /* Progress Steps */
+        .progress-steps {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .progress-steps::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 50px;
+            right: 50px;
+            height: 3px;
+            background: rgba(255,255,255,0.3);
+            z-index: 1;
+        }
+        
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+            max-width: 200px;
+        }
+        
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            border: 3px solid rgba(255,255,255,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            margin-bottom: 10px;
+            transition: all 0.3s;
+        }
+        
+        .step-number.active {
+            background: #fff;
+            color: #667eea;
+            border-color: #fff;
+            transform: scale(1.1);
+        }
+        
+        .step-number.completed {
+            background: #4CAF50;
+            border-color: #4CAF50;
+            color: white;
+        }
+        
+        .step-label {
+            color: white;
+            font-size: 14px;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        /* Form Container */
+        .form-container {
+            background: white;
+            border-radius: 25px;
+            padding: 40px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+        }
+        
+        .form-section {
+            margin-bottom: 40px;
+            display: none;
+        }
+        
+        .form-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .section-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .section-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #667eea;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+        }
+        
+        /* Form Grid */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        .form-label .required {
+            color: #e74c3c;
+        }
+        
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            font-size: 15px;
+            outline: none;
+            transition: border 0.2s;
+        }
+        
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            border-color: #667eea;
+        }
+        
+        .form-textarea {
+            resize: vertical;
+            min-height: 120px;
+            font-family: inherit;
+        }
+        
+        /* Complaint Type Cards */
+        .complaint-types {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .type-card {
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            padding: 25px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: white;
+        }
+        
+        .type-card:hover {
+            border-color: #667eea;
+            transform: translateY(-3px);
+        }
+        
+        .type-card.selected {
+            border-color: #667eea;
+            background: #f0f4ff;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.2);
+        }
+        
+        .type-icon {
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+        
+        .type-name {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+        
+        .type-desc {
+            font-size: 12px;
+            color: #7f8c8d;
+            line-height: 1.4;
+        }
+        
+        /* File Upload */
+        .file-upload {
+            border: 2px dashed #e9ecef;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: border 0.2s;
+            margin-bottom: 20px;
+        }
+        
+        .file-upload:hover {
+            border-color: #667eea;
+        }
+        
+        .file-upload.dragover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+        
+        .upload-icon {
+            font-size: 48px;
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        
+        .upload-text {
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .upload-hint {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        /* Uploaded Files */
+        .uploaded-files {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .file-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .file-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: #667eea;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .file-info {
+            flex: 1;
+        }
+        
+        .file-name {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 4px;
+        }
+        
+        .file-size {
+            font-size: 12px;
+            color: #7f8c8d;
+        }
+        
+        .file-remove {
+            background: none;
+            border: none;
+            color: #e74c3c;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+        
+        .file-remove:hover {
+            background: rgba(231, 76, 60, 0.1);
+        }
+        
+        /* Order Selection */
+        .order-selection {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .order-item {
+            padding: 20px;
+            border-bottom: 1px solid #e9ecef;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .order-item:last-child {
+            border-bottom: none;
+        }
+        
+        .order-item:hover {
+            background: #f8f9fa;
+        }
+        
+        .order-item.selected {
+            background: #f0f4ff;
+            border-left: 4px solid #667eea;
+        }
+        
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .order-id {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .order-date {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        
+        .order-product {
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+        
+        .order-status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .status-delivered {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-shipping {
+            background: #cce7ff;
+            color: #004085;
+        }
+        
+        /* Form Actions */
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid #e9ecef;
+        }
+        
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .btn-prev {
+            background: #f8f9fa;
+            color: #2c3e50;
+            border: 2px solid #e9ecef;
+        }
+        
+        .btn-prev:hover {
+            background: #e9ecef;
+        }
+        
+        .btn-next, .btn-submit {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-next:hover, .btn-submit:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-submit {
+            background: #4CAF50;
+        }
+        
+        .btn-submit:hover {
+            background: #45a049;
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+        }
+        
+        /* Success Screen */
+        .success-screen {
+            text-align: center;
+            padding: 60px 40px;
+            display: none;
+        }
+        
+        .success-screen.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        .success-icon {
+            font-size: 80px;
+            color: #4CAF50;
+            margin-bottom: 25px;
+        }
+        
+        .success-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        
+        .success-message {
+            color: #7f8c8d;
+            margin-bottom: 30px;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        
+        .ticket-info {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            display: inline-block;
+        }
+        
+        .ticket-number {
+            font-size: 20px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+        
+        .ticket-label {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .complaint-types {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="page-title">
+                <span>📝</span>
+                Complaint & Dispute Form
+            </div>
+            <div class="page-subtitle">
+                We're here to help resolve any issues with your order
+            </div>
+        </div>
+        
+        <!-- Progress Steps -->
+        <div class="progress-steps">
+            <div class="progress-step">
+                <div class="step-number active">1</div>
+                <div class="step-label">Order Selection</div>
+            </div>
+            <div class="progress-step">
+                <div class="step-number">2</div>
+                <div class="step-label">Issue Type</div>
+            </div>
+            <div class="progress-step">
+                <div class="step-number">3</div>
+                <div class="step-label">Details</div>
+            </div>
+            <div class="progress-step">
+                <div class="step-number">4</div>
+                <div class="step-label">Review & Submit</div>
+            </div>
+        </div>
+        
+        <!-- Form Container -->
+        <div class="form-container">
+            
+            <!-- Step 1: Order Selection -->
+            <div class="form-section active" id="step1">
+                <div class="section-title">
+                    <div class="section-icon">📦</div>
+                    Select Order
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Choose the order you want to complain about <span class="required">*</span></label>
+                    <div class="order-selection">
+                        <div class="order-item selected">
+                            <div class="order-header">
+                                <div class="order-id">#ORD-2024-001</div>
+                                <div class="order-date">Jan 10, 2024</div>
+                            </div>
+                            <div class="order-product">Y Telma X Tokk - Smartphone Flagship</div>
+                            <div class="order-status status-delivered">Delivered</div>
+                        </div>
+                        
+                        <div class="order-item">
+                            <div class="order-header">
+                                <div class="order-id">#ORD-2024-002</div>
+                                <div class="order-date">Jan 15, 2024</div>
+                            </div>
+                            <div class="order-product">Wireless Earbuds Pro</div>
+                            <div class="order-status status-shipping">Shipping</div>
+                        </div>
+                        
+                        <div class="order-item">
+                            <div class="order-header">
+                                <div class="order-id">#ORD-2024-003</div>
+                                <div class="order-date">Jan 18, 2024</div>
+                            </div>
+                            <div class="order-product">Smart Watch Series 5</div>
+                            <div class="order-status status-delivered">Delivered</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <div></div> <!-- Empty div for spacing -->
+                    <button class="btn btn-next" onclick="nextStep(2)">
+                        Next Step
+                        <span>→</span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Step 2: Issue Type -->
+            <div class="form-section" id="step2">
+                <div class="section-title">
+                    <div class="section-icon">⚠️</div>
+                    Select Issue Type
+                </div>
+                
+                <div class="complaint-types">
+                    <div class="type-card selected">
+                        <div class="type-icon">🚚</div>
+                        <div class="type-name">Delivery Issue</div>
+                        <div class="type-desc">Late delivery, wrong address, or missing items</div>
+                    </div>
+                    
+                    <div class="type-card">
+                        <div class="type-icon">📱</div>
+                        <div class="type-name">Product Issue</div>
+                        <div class="type-desc">Defective, damaged, or wrong product received</div>
+                    </div>
+                    
+                    <div class="type-card">
+                        <div class="type-icon">💸</div>
+                        <div class="type-name">Payment Issue</div>
+                        <div class="type-desc">Double charged, refund problems, or payment errors</div>
+                    </div>
+                    
+                    <div class="type-card">
+                        <div class="type-icon">👤</div>
+                        <div class="type-name">Seller Issue</div>
+                        <div class="type-desc">Poor communication or unprofessional behavior</div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Please describe your issue in detail <span class="required">*</span></label>
+                    <textarea class="form-textarea" placeholder="Please provide as much detail as possible about the issue you're experiencing..."></textarea>
+                </div>
+                
+                <div class="form-actions">
+                    <button class="btn btn-prev" onclick="prevStep(1)">
+                        <span>←</span>
+                        Previous
+                    </button>
+                    <button class="btn btn-next" onclick="nextStep(3)">
+                        Next Step
+                        <span>→</span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Step 3: Details & Evidence -->
+            <div class="form-section" id="step3">
+                <div class="section-title">
+                    <div class="section-icon">📎</div>
+                    Additional Details & Evidence
+                </div>
+                
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Preferred Resolution <span class="required">*</span></label>
+                        <select class="form-select">
+                            <option value="">Select preferred resolution</option>
+                            <option value="refund">Full Refund</option>
+                            <option value="partial_refund">Partial Refund</option>
+                            <option value="replacement">Product Replacement</option>
+                            <option value="exchange">Product Exchange</option>
+                            <option value="repair">Product Repair</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Contact Phone Number</label>
+                        <input type="tel" class="form-input" placeholder="+62 812-3456-7890">
+                    </div>
+                    
+                    <div class="form-group full-width">
+                        <label class="form-label">Additional Comments</label>
+                        <textarea class="form-textarea" placeholder="Any additional information that might help us resolve your issue..."></textarea>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Upload Evidence (Optional)</label>
+                    <div class="file-upload" onclick="document.getElementById('fileInput').click()">
+                        <div class="upload-icon">📁</div>
+                        <div class="upload-text">Click to upload files</div>
+                        <div class="upload-hint">Supports JPG, PNG, PDF up to 10MB</div>
+                        <input type="file" id="fileInput" class="file-input" multiple>
+                    </div>
+                    
+                    <div class="uploaded-files">
+                        <div class="file-item">
+                            <div class="file-icon">IMG</div>
+                            <div class="file-info">
+                                <div class="file-name">damaged_product.jpg</div>
+                                <div class="file-size">2.4 MB</div>
+                            </div>
+                            <button class="file-remove">🗑️</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button class="btn btn-prev" onclick="prevStep(2)">
+                        <span>←</span>
+                        Previous
+                    </button>
+                    <button class="btn btn-next" onclick="nextStep(4)">
+                        Next Step
+                        <span>→</span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Step 4: Review & Submit -->
+            <div class="form-section" id="step4">
+                <div class="section-title">
+                    <div class="section-icon">👁️</div>
+                    Review & Submit
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Complaint Summary</label>
+                    <div style="background: #f8f9fa; padding: 25px; border-radius: 12px; line-height: 1.6;">
+                        <div style="margin-bottom: 15px;">
+                            <strong>Order:</strong> #ORD-2024-001 (Y Telma X Tokk - Smartphone Flagship)
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <strong>Issue Type:</strong> Delivery Issue
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <strong>Description:</strong> Package was delivered 3 days late and the product box was damaged during shipping.
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <strong>Preferred Resolution:</strong> Partial Refund
+                        </div>
+                        <div>
+                            <strong>Evidence:</strong> 1 file attached
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">
+                        <input type="checkbox" style="margin-right: 10px;">
+                        I confirm that the information provided is accurate and I agree to the terms of service
+                    </label>
+                </div>
+                
+                <div class="form-actions">
+                    <button class="btn btn-prev" onclick="prevStep(3)">
+                        <span>←</span>
+                        Previous
+                    </button>
+                    <button class="btn btn-submit" onclick="submitComplaint()">
+                        Submit Complaint
+                        <span>✓</span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Success Screen -->
+            <div class="success-screen" id="successScreen">
+                <div class="success-icon">✅</div>
+                <div class="success-title">Complaint Submitted Successfully!</div>
+                <div class="success-message">
+                    We've received your complaint and our support team will review it within 24 hours.<br>
+                    You'll receive updates via email and in your notification center.
+                </div>
+                
+                <div class="ticket-info">
+                    <div class="ticket-number">#COMP-2024-00128</div>
+                    <div class="ticket-label">Your Complaint Reference Number</div>
+                </div>
+                
+                <button class="btn" style="background: #667eea; color: white;" onclick="window.location.href='#'">
+                    Track Complaint Status
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        
+        function nextStep(step) {
+            document.getElementById('step' + currentStep).classList.remove('active');
+            document.getElementById('step' + step).classList.add('active');
+            
+            // Update progress steps
+            document.querySelectorAll('.step-number')[currentStep - 1].classList.remove('active');
+            document.querySelectorAll('.step-number')[step - 1].classList.add('active');
+            
+            currentStep = step;
+        }
+        
+        function prevStep(step) {
+            document.getElementById('step' + currentStep).classList.remove('active');
+            document.getElementById('step' + step).classList.add('active');
+            
+            // Update progress steps
+            document.querySelectorAll('.step-number')[currentStep - 1].classList.remove('active');
+            document.querySelectorAll('.step-number')[step - 1].classList.add('active');
+            
+            currentStep = step;
+        }
+        
+        function submitComplaint() {
+            // Hide form and show success screen
+            document.getElementById('step4').classList.remove('active');
+            document.getElementById('successScreen').classList.add('active');
+            
+            // Update progress to completed
+            document.querySelectorAll('.step-number').forEach(step => {
+                step.classList.remove('active');
+                step.classList.add('completed');
+            });
+        }
+        
+        // Add click handlers for type cards
+        document.querySelectorAll('.type-card').forEach(card => {
+            card.addEventListener('click', function() {
+                document.querySelectorAll('.type-card').forEach(c => c.classList.remove('selected'));
+                this.classList.add('selected');
+            });
+        });
+        
+        // Add click handlers for order items
+        document.querySelectorAll('.order-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.order-item').forEach(i => i.classList.remove('selected'));
+                this.classList.add('selected');
+            });
+        });
+        
+        // File upload drag and drop
+        const fileUpload = document.querySelector('.file-upload');
+        const fileInput = document.getElementById('fileInput');
+        
+        fileUpload.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            this.classList.add('dragover');
+        });
+        
+        fileUpload.addEventListener('dragleave', function() {
+            this.classList.remove('dragover');
+        });
+        
+        fileUpload.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.classList.remove('dragover');
+            // Handle file upload here
+        });
+    </script>
+</body>
+</html>

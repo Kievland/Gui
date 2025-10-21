@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Wishlist</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 30px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+        
+        .page-title {
+            font-size: 36px;
+            font-weight: bold;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .page-title::before {
+            content: '❤️';
+            font-size: 32px;
+        }
+        
+        .user-actions {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .notification-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+        }
+        
+        .profile-pic {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            border: 2px solid rgba(255,255,255,0.5);
+        }
+        
+        /* Wishlist Stats */
+        .wishlist-stats {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .stat-number {
+            font-size: 32px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+        
+        .stat-label {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        
+        /* Wishlist Content */
+        .wishlist-content {
+            background: white;
+            border-radius: 25px;
+            padding: 40px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        }
+        
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .section-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .sort-filter {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .sort-select {
+            padding: 12px 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            background: white;
+            color: #2c3e50;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        
+        .view-toggle {
+            display: flex;
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 5px;
+        }
+        
+        .view-btn {
+            padding: 10px 20px;
+            border: none;
+            background: none;
+            border-radius: 8px;
+            cursor: pointer;
+            color: #7f8c8d;
+            font-weight: 500;
+        }
+        
+        .view-btn.active {
+            background: white;
+            color: #667eea;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        /* Products Grid */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .product-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+            border-color: #667eea;
+        }
+        
+        .product-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: #e74c3c;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            z-index: 2;
+        }
+        
+        .wishlist-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255,255,255,0.9);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.2s;
+            z-index: 2;
+        }
+        
+        .wishlist-btn.active {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        .wishlist-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        .product-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .product-info {
+            padding: 25px;
+        }
+        
+        .product-category {
+            color: #667eea;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+        
+        .product-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+        
+        .product-rating {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .stars {
+            color: #ffd700;
+            font-size: 14px;
+        }
+        
+        .rating-count {
+            color: #7f8c8d;
+            font-size: 12px;
+        }
+        
+        .product-price {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .current-price {
+            font-size: 22px;
+            font-weight: bold;
+            color: #e74c3c;
+        }
+        
+        .original-price {
+            font-size: 16px;
+            color: #7f8c8d;
+            text-decoration: line-through;
+        }
+        
+        .discount {
+            background: #ffeaa7;
+            color: #e74c3c;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .product-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .action-btn {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            background: white;
+            color: #667eea;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        
+        .action-btn.primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 40px;
+        }
+        
+        .empty-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+        
+        .empty-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        
+        .empty-desc {
+            color: #7f8c8d;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        
+        .browse-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .browse-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        /* Recently Viewed */
+        .recent-section {
+            margin-top: 50px;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .see-all {
+            color: #667eea;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        
+        .recent-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .recent-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.2s;
+            cursor: pointer;
+        }
+        
+        .recent-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .recent-image {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        
+        .recent-name {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+        
+        .recent-price {
+            font-weight: bold;
+            color: #e74c3c;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .content-header {
+                flex-direction: column;
+                gap: 20px;
+                align-items: flex-start;
+            }
+            
+            .sort-filter {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="page-title">My Wishlist</div>
+            <div class="user-actions">
+                <button class="notification-btn">🔔</button>
+                <div class="profile-pic">LA</div>
+            </div>
+        </div>
+        
+        <!-- Wishlist Stats -->
+        <div class="wishlist-stats">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">15</div>
+                    <div class="stat-label">Items in Wishlist</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">8</div>
+                    <div class="stat-label">Price Drops</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">Low Stock</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">Rp 12.5JT</div>
+                    <div class="stat-label">Total Value</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Wishlist Content -->
+        <div class="wishlist-content">
+            <div class="content-header">
+                <div class="section-title">Saved Items (15)</div>
+                <div class="sort-filter">
+                    <select class="sort-select">
+                        <option>Sort by: Recently Added</option>
+                        <option>Price: Low to High</option>
+                        <option>Price: High to Low</option>
+                        <option>Name: A to Z</option>
+                    </select>
+                    <div class="view-toggle">
+                        <button class="view-btn active">Grid</button>
+                        <button class="view-btn">List</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Products Grid -->
+            <div class="products-grid">
+                
+                <!-- Product 1 -->
+                <div class="product-card">
+                    <div class="product-badge">SALE</div>
+                    <button class="wishlist-btn active">❤️</button>
+                    <div class="product-image">Y Telma X Tokk Flagship Smartphone</div>
+                    <div class="product-info">
+                        <div class="product-category">Electronics</div>
+                        <div class="product-name">Y Telma X Tokk - Premium Smartphone 128GB</div>
+                        <div class="product-rating">
+                            <div class="stars">★★★★★</div>
+                            <div class="rating-count">(128 reviews)</div>
+                        </div>
+                        <div class="product-price">
+                            <div class="current-price">Rp 2.850.000</div>
+                            <div class="original-price">Rp 3.250.000</div>
+                            <div class="discount">-12%</div>
+                        </div>
+                        <div class="product-actions">
+                            <button class="action-btn">Add to Cart</button>
+                            <button class="action-btn primary">Buy Now</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 2 -->
+                <div class="product-card">
+                    <button class="wishlist-btn active">❤️</button>
+                    <div class="product-image">Wireless Earbuds Pro</div>
+                    <div class="product-info">
+                        <div class="product-category">Audio</div>
+                        <div class="product-name">Premium Wireless Earbuds with Noise Cancellation</div>
+                        <div class="product-rating">
+                            <div class="stars">★★★★☆</div>
+                            <div class="rating-count">(64 reviews)</div>
+                        </div>
+                        <div class="product-price">
+                            <div class="current-price">Rp 1.250.000</div>
+                            <div class="original-price">Rp 1.500.000</div>
+                            <div class="discount">-17%</div>
+                        </div>
+                        <div class="product-actions">
+                            <button class="action-btn">Add to Cart</button>
+                            <button class="action-btn primary">Buy Now</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 3 -->
+                <div class="product-card">
+                    <div class="product-badge">LOW STOCK</div>
+                    <button class="wishlist-btn active">❤️</button>
+                    <div class="product-image">Smart Watch Series 5</div>
+                    <div class="product-info">
+                        <div class="product-category">Wearables</div>
+                        <div class="product-name">Smart Watch Series 5 - Health & Fitness Tracker</div>
+                        <div class="product-rating">
+                            <div class="stars">★★★★★</div>
+                            <div class="rating-count">(89 reviews)</div>
+                        </div>
+                        <div class="product-price">
+                            <div class="current-price">Rp 3.499.000</div>
+                        </div>
+                        <div class="product-actions">
+                            <button class="action-btn">Add to Cart</button>
+                            <button class="action-btn primary">Buy Now</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 4 -->
+                <div class="product-card">
+                    <button class="wishlist-btn active">❤️</button>
+                    <div class="product-image">Gaming Laptop RTX</div>
+                    <div class="product-info">
+                        <div class="product-category">Computers</div>
+                        <div class="product-name">Gaming Laptop RTX 4060 - 16GB RAM 1TB SSD</div>
+                        <div class="product-rating">
+                            <div class="stars">★★★★☆</div>
+                            <div class="rating-count">(42 reviews)</div>
+                        </div>
+                        <div class="product-price">
+                            <div class="current-price">Rp 18.999.000</div>
+                            <div class="original-price">Rp 21.500.000</div>
+                            <div class="discount">-12%</div>
+                        </div>
+                        <div class="product-actions">
+                            <button class="action-btn">Add to Cart</button>
+                            <button class="action-btn primary">Buy Now</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 5 -->
+                <div class="product-card">
+                    <div class="product-badge">FREE SHIPPING</div>
+                    <button class="wishlist-btn active">❤️</button>
+                    <div class="product-image">DSLR Camera Kit</div>
+                    <div class="product-info">
+                        <div class="product-category">Photography</div>
+                        <div class="product-name">Professional DSLR Camera with 18-55mm Lens Kit</div>
+                        <div class="product-rating">
+                            <div class="stars">★★★★★</div>
+                            <div class="rating-count">(156 reviews)</div>
+                        </div>
+                        <div class="product-price">
+                            <div class="current-price">Rp 8.750.000</div>
+                        </div>
+                        <div class="product-actions">
+                            <button class="action-btn">Add to Cart</button>
+                            <button class="action-btn primary">Buy Now</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 6 -->
+                <div class="product-card">
+                    <button class="wishlist-btn active">❤️</button>
+                    <div class="product-image">Wireless Keyboard</div>
+                    <div class="product-info">
+                        <div class="product-category">Accessories</div>
+                        <div class="product-name">Mechanical Wireless Keyboard RGB Backlit</div>
+                        <div class="product-rating">
+                            <div class="stars">★★★★☆</div>
+                            <div class="rating-count">(73 reviews)</div>
+                        </div>
+                        <div class="product-price">
+                            <div class="current-price">Rp 850.000</div>
+                            <div class="original-price">Rp 1.200.000</div>
+                            <div class="discount">-29%</div>
+                        </div>
+                        <div class="product-actions">
+                            <button class="action-btn">Add to Cart</button>
+                            <button class="action-btn primary">Buy Now</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Recently Viewed Section -->
+            <div class="recent-section">
+                <div class="section-header">
+                    <div class="section-title">Recently Viewed</div>
+                    <a href="#" class="see-all">See All</a>
+                </div>
+                <div class="recent-grid">
+                    <div class="recent-card">
+                        <div class="recent-image">Phone Case</div>
+                        <div class="recent-name">Leather Phone Case</div>
+                        <div class="recent-price">Rp 150.000</div>
+                    </div>
+                    <div class="recent-card">
+                        <div class="recent-image">Power Bank</div>
+                        <div class="recent-name">20,000mAh Power Bank</div>
+                        <div class="recent-price">Rp 350.000</div>
+                    </div>
+                    <div class="recent-card">
+                        <div class="recent-image">Mouse</div>
+                        <div class="recent-name">Wireless Gaming Mouse</div>
+                        <div class="recent-price">Rp 450.000</div>
+                    </div>
+                    <div class="recent-card">
+                        <div class="recent-image">Headset</div>
+                        <div class="recent-name">Gaming Headset 7.1</div>
+                        <div class="recent-price">Rp 750.000</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

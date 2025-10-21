@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notification Inbox UI</title>
+    <style>
+        .notification-inbox {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            width: 400px;
+            max-height: 600px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .notification-header {
+            padding: 20px;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .notification-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .notification-badge {
+            background: #e74c3c;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            color: #7f8c8d;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+
+        .action-btn:hover {
+            background: #f8f9fa;
+        }
+
+        /* Filter Tabs */
+        .notification-tabs {
+            display: flex;
+            border-bottom: 1px solid #e9ecef;
+            background: #f8f9fa;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            color: #7f8c8d;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .tab.active {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #667eea;
+        }
+
+        .tab-badge {
+            background: #e74c3c;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 10px;
+            margin-left: 5px;
+        }
+
+        /* Notifications List */
+        .notifications-list {
+            flex: 1;
+            overflow-y: auto;
+            max-height: 450px;
+        }
+
+        .notification-item {
+            padding: 20px;
+            border-bottom: 1px solid #f1f3f4;
+            display: flex;
+            gap: 15px;
+            cursor: pointer;
+            transition: background 0.2s;
+            position: relative;
+        }
+
+        .notification-item:hover {
+            background: #f8f9fa;
+        }
+
+        .notification-item.unread {
+            background: #f0f4ff;
+        }
+
+        .notification-item.unread::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: #667eea;
+        }
+
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .icon-order {
+            background: #3498db;
+        }
+
+        .icon-promo {
+            background: #e74c3c;
+        }
+
+        .icon-system {
+            background: #2ecc71;
+        }
+
+        .icon-shipping {
+            background: #f39c12;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-message {
+            color: #2c3e50;
+            margin-bottom: 5px;
+            line-height: 1.4;
+        }
+
+        .notification-time {
+            font-size: 12px;
+            color: #7f8c8d;
+        }
+
+        .notification-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .action-button {
+            padding: 6px 12px;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            background: white;
+            color: #2c3e50;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .action-button.primary {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .action-button:hover {
+            transform: translateY(-1px);
+        }
+
+        /* Empty State */
+        .empty-state {
+            padding: 60px 40px;
+            text-align: center;
+            color: #7f8c8d;
+        }
+
+        .empty-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        /* Footer */
+        .notification-footer {
+            padding: 15px 20px;
+            border-top: 1px solid #e9ecef;
+            text-align: center;
+        }
+
+        .view-all-btn {
+            background: none;
+            border: none;
+            color: #667eea;
+            cursor: pointer;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+
+        .view-all-btn:hover {
+            background: #f0f4ff;
+        }
+    </style>
+</head>
+<body>
+    <!-- Notification Inbox Component -->
+    <div class="notification-inbox">
+        <!-- Header -->
+        <div class="notification-header">
+            <div class="notification-title">
+                🔔 Notifications
+                <span class="notification-badge">5</span>
+            </div>
+            <div class="header-actions">
+                <button class="action-btn">⚙️</button>
+                <button class="action-btn">✕</button>
+            </div>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="notification-tabs">
+            <button class="tab active">All</button>
+            <button class="tab">Unread <span class="tab-badge">3</span></button>
+            <button class="tab">Orders</button>
+            <button class="tab">Promo</button>
+        </div>
+
+        <!-- Notifications List -->
+        <div class="notifications-list">
+            <!-- Unread Notification -->
+            <div class="notification-item unread">
+                <div class="notification-icon icon-order">📦</div>
+                <div class="notification-content">
+                    <div class="notification-message">
+                        <strong>Order #ORD-2024-015</strong> has been shipped! Track your package now.
+                    </div>
+                    <div class="notification-time">10 minutes ago</div>
+                    <div class="notification-actions">
+                        <button class="action-button primary">Track Order</button>
+                        <button class="action-button">View Details</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Unread Notification -->
+            <div class="notification-item unread">
+                <div class="notification-icon icon-promo">🎁</div>
+                <div class="notification-content">
+                    <div class="notification-message">
+                        <strong>Special offer!</strong> Get 20% off on your next purchase. Limited time only!
+                    </div>
+                    <div class="notification-time">1 hour ago</div>
+                    <div class="notification-actions">
+                        <button class="action-button primary">Use Code</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Read Notification -->
+            <div class="notification-item">
+                <div class="notification-icon icon-shipping">🚚</div>
+                <div class="notification-content">
+                    <div class="notification-message">
+                        Your package from <strong>Tenima Kathi</strong> will arrive tomorrow.
+                    </div>
+                    <div class="notification-time">3 hours ago</div>
+                </div>
+            </div>
+
+            <!-- Unread Notification -->
+            <div class="notification-item unread">
+                <div class="notification-icon icon-system">💰</div>
+                <div class="notification-content">
+                    <div class="notification-message">
+                        Payment for <strong>Order #ORD-2024-014</strong> has been confirmed.
+                    </div>
+                    <div class="notification-time">5 hours ago</div>
+                    <div class="notification-actions">
+                        <button class="action-button">View Invoice</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Read Notification -->
+            <div class="notification-item">
+                <div class="notification-icon icon-system">👋</div>
+                <div class="notification-content">
+                    <div class="notification-message">
+                        Welcome to our marketplace! Complete your profile to get personalized recommendations.
+                    </div>
+                    <div class="notification-time">1 day ago</div>
+                    <div class="notification-actions">
+                        <button class="action-button primary">Complete Profile</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="notification-footer">
+            <button class="view-all-btn">View All Notifications</button>
+        </div>
+    </div>
+</body>
+</html>

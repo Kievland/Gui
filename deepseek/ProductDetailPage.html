@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Core Java Fundamentals - UniMart</title>
+    <style>
+        /* DESIGN SYSTEM UNIMART */
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #10b981;
+            --accent: #f59e0b;
+            --text-dark: #1f2937;
+            --text-light: #6b7280;
+            --background: #f8fafc;
+            --white: #ffffff;
+            --border: #e2e8f0;
+            --card-bg: #ffffff;
+            --success: #10b981;
+            --error: #ef4444;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--background);
+            color: var(--text-dark);
+        }
+        
+        /* NAVIGATION BAR */
+        .navbar {
+            background: var(--white);
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .search-bar {
+            flex: 1;
+            max-width: 500px;
+            margin: 0 2rem;
+            position: relative;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 3rem;
+            border: 2px solid var(--border);
+            border-radius: 25px;
+            font-size: 0.95rem;
+            background: var(--background);
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+        }
+        
+        .nav-icons {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+        
+        .nav-icon {
+            position: relative;
+            color: var(--text-dark);
+            text-decoration: none;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        /* BREADCRUMB */
+        .breadcrumb {
+            max-width: 1200px;
+            margin: 1rem auto;
+            padding: 0 1.5rem;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .breadcrumb a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+        
+        /* PRODUCT DETAIL CONTAINER */
+        .product-detail-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+        }
+        
+        /* PRODUCT GALLERY */
+        .product-gallery {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .main-image {
+            width: 100%;
+            height: 500px;
+            background: white;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            border: 1px solid var(--border);
+        }
+        
+        .book-cover {
+            width: 280px;
+            height: 400px;
+            background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .book-cover::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 40%;
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+        }
+        
+        .book-title {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            z-index: 2;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .book-subtitle {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            z-index: 2;
+            opacity: 0.9;
+        }
+        
+        .book-author {
+            font-size: 1rem;
+            z-index: 2;
+            opacity: 0.8;
+        }
+        
+        .book-edition {
+            position: absolute;
+            bottom: 1rem;
+            right: 1rem;
+            font-size: 0.8rem;
+            opacity: 0.7;
+            z-index: 2;
+        }
+        
+        .image-badge {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: var(--accent);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            z-index: 3;
+        }
+        
+        .thumbnail-gallery {
+            display: flex;
+            gap: 0.75rem;
+            overflow-x: auto;
+        }
+        
+        .thumbnail {
+            width: 80px;
+            height: 80px;
+            background: var(--border);
+            border-radius: 8px;
+            flex-shrink: 0;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: var(--text-light);
+            text-align: center;
+            padding: 0.5rem;
+        }
+        
+        .thumbnail.active {
+            border-color: var(--primary);
+        }
+        
+        /* PRODUCT INFO */
+        .product-info {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .product-header {
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 1.5rem;
+        }
+        
+        .product-category {
+            color: var(--primary);
+            font-weight: 500;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .product-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: 1rem;
+        }
+        
+        .product-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .stars {
+            color: var(--accent);
+            font-weight: 600;
+        }
+        
+        .rating-count {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        .product-price-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .current-price {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .original-price {
+            font-size: 1.25rem;
+            color: var(--text-light);
+            text-decoration: line-through;
+        }
+        
+        .discount-badge {
+            background: var(--error);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        /* SELLER INFO */
+        .seller-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--background);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
+        
+        .seller-avatar {
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .seller-details {
+            flex: 1;
+        }
+        
+        .seller-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .seller-rating {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        .chat-btn {
+            padding: 0.5rem 1rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .chat-btn:hover {
+            background: var(--primary-dark);
+        }
+        
+        /* PRODUCT ACTIONS */
+        .product-actions {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: var(--background);
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+        }
+        
+        .quantity-btn {
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            cursor: pointer;
+            color: var(--text-dark);
+            padding: 0.25rem;
+        }
+        
+        .quantity-input {
+            width: 50px;
+            text-align: center;
+            border: none;
+            background: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            flex: 1;
+        }
+        
+        .wishlist-btn {
+            padding: 0.75rem 1.5rem;
+            background: var(--white);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .wishlist-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        
+        .buy-now-btn {
+            flex: 1;
+            padding: 0.75rem 1.5rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .buy-now-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        /* PRODUCT META */
+        .product-meta {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            background: var(--background);
+            border-radius: 8px;
+        }
+        
+        .meta-icon {
+            font-size: 1.25rem;
+        }
+        
+        .meta-text {
+            font-size: 0.9rem;
+        }
+        
+        .meta-label {
+            color: var(--text-light);
+        }
+        
+        /* PRODUCT DESCRIPTION */
+        .product-description {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .description-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .description-content {
+            line-height: 1.7;
+            color: var(--text-dark);
+        }
+        
+        .feature-list {
+            list-style: none;
+            margin-top: 1rem;
+        }
+        
+        .feature-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .feature-list li:before {
+            content: "✓";
+            color: var(--success);
+            font-weight: bold;
+        }
+        
+        /* REVIEWS SECTION */
+        .reviews-section {
+            margin-top: 3rem;
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .reviews-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .reviews-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        
+        .review-item {
+            padding: 1.5rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .review-header {
+            display: flex;
+            justify-content: between;
+            align-items: start;
+            margin-bottom: 0.75rem;
+        }
+        
+        .reviewer-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .reviewer-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .reviewer-name {
+            font-weight: 600;
+        }
+        
+        .review-date {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        .review-content {
+            line-height: 1.6;
+            color: var(--text-dark);
+        }
+        
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 968px) {
+            .product-detail-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .product-meta {
+                grid-template-columns: 1fr;
+            }
+            
+            .book-cover {
+                width: 240px;
+                height: 340px;
+            }
+            
+            .book-title {
+                font-size: 1.5rem;
+            }
+            
+            .book-subtitle {
+                font-size: 1rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-wrap: wrap;
+            }
+            
+            .search-bar {
+                order: 3;
+                margin: 1rem 0 0;
+                max-width: 100%;
+            }
+            
+            .product-actions {
+                flex-direction: column;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .main-image {
+                height: 400px;
+            }
+            
+            .book-cover {
+                width: 200px;
+                height: 280px;
+            }
+            
+            .book-title {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVIGATION BAR -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">UniMart</a>
+            
+            <div class="search-bar">
+                <div class="search-icon">🔍</div>
+                <input type="text" class="search-input" placeholder="Cari buku, laptop, alat tulis...">
+            </div>
+            
+            <div class="nav-icons">
+                <a href="#" class="nav-icon"><h2>Home</h2></a>
+                <a href="#" class="nav-icon"><h2>Wishlist</h2></a>
+                <a href="#" class="nav-icon"><h2>Chat</h2></a>
+                <a href="#" class="nav-icon"><h2>Profil</h2></a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- BREADCRUMB -->
+    <div class="breadcrumb">
+        <a href="#">Home</a> > 
+        <a href="#">Buku & E-Book</a> > 
+        <a href="#">Pemrograman</a> > 
+        <span>Core Java Fundamentals</span>
+    </div>
+
+    <!-- PRODUCT DETAIL -->
+    <div class="product-detail-container">
+        <!-- PRODUCT GALLERY -->
+        <div class="product-gallery">
+            <div class="main-image">
+                <div class="book-cover">
+                    <div class="book-title">CORE JAVA</div>
+                    <div class="book-subtitle">Volume I - Fundamentals</div>
+                    <div class="book-author">CAY S. HORSTMANN</div>
+                    <div class="book-edition">ELEVENTH EDITION</div>
+                </div>
+                <div class="image-badge">BEST SELLER</div>
+            </div>
+            <div class="thumbnail-gallery">
+                <div class="thumbnail active">Cover Depan</div>
+                <div class="thumbnail">Sample Halaman</div>
+                <div class="thumbnail">Daftar Isi</div>
+                <div class="thumbnail">Back Cover</div>
+            </div>
+        </div>
+
+        <!-- PRODUCT INFO -->
+        <div class="product-info">
+            <div class="product-header">
+                <div class="product-category">BUKU & E-BOOK • PEMROGRAMAN • JAVA</div>
+                <h1 class="product-title">Core Java Volume I - Fundamentals (Edisi 11)</h1>
+                <div class="product-rating">
+                    <div class="stars">★★★★★ 4.9</div>
+                    <div class="rating-count">(127 ulasan)</div>
+                </div>
+                <div class="product-price-section">
+                    <div class="current-price">Rp 285.000</div>
+                    <div class="original-price">Rp 325.000</div>
+                    <div class="discount-badge">-12%</div>
+                </div>
+            </div>
+
+            <!-- SELLER INFO -->
+            <div class="seller-info">
+                <div class="seller-avatar">BS</div>
+                <div class="seller-details">
+                    <div class="seller-name">Budi_SI2020</div>
+                    <div class="seller-rating"><h2>⭐ 4.9 • 89 transaksi</h2></div>
+                </div>
+                <button class="chat-btn"> Chat Penjual</button>
+            </div>
+
+            <!-- PRODUCT ACTIONS -->
+            <div class="product-actions">
+                <div class="quantity-selector">
+                    <button class="quantity-btn">-</button>
+                    <input type="text" class="quantity-input" value="1" readonly>
+                    <button class="quantity-btn">+</button>
+                </div>
+                <div class="action-buttons">
+                    <button class="wishlist-btn">Wishlist</button>
+                    <button class="buy-now-btn">Tambah ke Keranjang</button>
+                </div>
+            </div>
+
+            <!-- TAWAR MENAWAR -->
+            <div class="product-actions">
+                <button class="wishlist-btn" style="flex: 1;">Ajukan Penawaran</button>
+                <button class="buy-now-btn" style="background: var(--secondary);">Beli Sekarang</button>
+            </div>
+
+            <!-- PRODUCT META -->
+            <div class="product-meta">
+                <div class="meta-item">
+                    <div class="meta-icon"></div>
+                    <div class="meta-text">
+                        <div class="meta-label">Stok</div>
+                        <div>8 tersedia</div>
+                    </div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-text">
+                        <div class="meta-label">Kondisi</div>
+                        <div>Baru - Segel</div>
+                    </div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-text">
+                        <div class="meta-label">Berat</div>
+                        <div>1.2 kg</div>
+                    </div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-text">
+                        <div class="meta-label">Lokasi</div>
+                        <div>Kampus A • 0.8 km</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PRODUCT DESCRIPTION -->
+            <div class="product-description">
+                <h3 class="description-title">Deskripsi Produk</h3>
+                <div class="description-content">
+                    <p><strong>Core Java Volume I - Fundamentals, Edisi Kesebelas</strong> merupakan buku wajib untuk mahasiswa dan profesional yang serius mempelajari pemrograman Java. Buku karya Cay S. Horstmann ini telah menjadi referensi standar industri selama lebih dari dua dekade.</p>
+                    
+                    <ul class="feature-list">
+                        <li>Pembahasan komprehensif Java SE 17 (Long-Term Support)</li>
+                        <li>Konsep Object-Oriented Programming yang mendalam dan praktis</li>
+                        <li>Coverage lengkap collections, lambda expressions, streams</li>
+                        <li>Modular programming dengan Java Platform Module System</li>
+                        <li>Concurrent dan parallel programming</li>
+                        <li>Studi kasus real-world dan best practices industry</li>
+                        <li>Latihan dan proyek yang relevan dengan kurikulum informatika</li>
+                    </ul>
+                    
+                    <p><strong>Spesifikasi Buku:</strong><br>
+                    - Penulis: Cay S. Horstmann<br>
+                    - Penerbit: Prentice Hall<br>
+                    - ISBN: 978-0-13-516630-7<br>
+                    - Tahun Terbit: 2023<br>
+                    - Halaman: 864 halaman<br>
+                    - Bahasa: English<br>
+                    - Cover: Hard Cover<br>
+                    - Dimensi: 18.8 x 4.1 x 23.1 cm</p>
+                    
+                    <p><strong>Keunggulan:</strong> Buku ini sangat cocok untuk mata kuliah Pemrograman Berorientasi Objek, Struktur Data, dan Pemrograman Lanjut. Dapat menjadi referensi sepanjang karir sebagai software developer.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- REVIEWS SECTION -->
+    <div class="reviews-section" style="max-width: 1200px; margin: 0 auto 2rem; padding: 0 1.5rem;">
+        <div class="reviews-header">
+            <h3 class="reviews-title">Ulasan Pembeli (127)</h3>
+            <button class="chat-btn">Tulis Ulasan</button>
+        </div>
+        
+        <div class="review-item">
+            <div class="review-header">
+                <div class="reviewer-info">
+                    <div class="reviewer-avatar">AS</div>
+                    <div>
+                        <div class="reviewer-name">Ahmad_SI2021</div>
+                        <div class="review-date">2 minggu yang lalu</div>
+                    </div>
+                </div>
+                <div class="stars">★★★★★</div>
+            </div>
+            <div class="review-content">
+                Buku yang sangat comprehensive! Penjelasan tentang OOP dan Collections sangat detail. Cocok banget buat referensi tugas akhir dan persiapan kerja sebagai Java Developer.
+            </div>
+        </div>
+        
+        <div class="review-item">
+            <div class="review-header">
+                <div class="reviewer-info">
+                    <div class="reviewer-avatar">DW</div>
+                    <div>
+                        <div class="reviewer-name">Dewi_TI2019</div>
+                        <div class="review-date">1 bulan yang lalu</div>
+                    </div>
+                </div>
+                <div class="stars">★★★★★</div>
+            </div>
+            <div class="review-content">
+                Investasi yang worth it! Buku ini membantu saya memahami konsep Java yang sulit seperti multithreading dan streams. Penjual juga responsif dan pengiriman cepat.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Thumbnail gallery interaction
+        document.querySelectorAll('.thumbnail').forEach(thumb => {
+            thumb.addEventListener('click', function() {
+                document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Simulate image change
+                const thumbText = this.textContent;
+                alert(`Menampilkan: ${thumbText}`);
+            });
+        });
+        
+        // Quantity selector
+        const quantityInput = document.querySelector('.quantity-input');
+        document.querySelectorAll('.quantity-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                let quantity = parseInt(quantityInput.value);
+                if (this.textContent === '+') {
+                    quantityInput.value = quantity + 1;
+                } else if (this.textContent === '-' && quantity > 1) {
+                    quantityInput.value = quantity - 1;
+                }
+            });
+        });
+        
+        // Action buttons
+        document.querySelector('.wishlist-btn').addEventListener('click', function() {
+            alert('Buku Core Java ditambahkan ke wishlist!');
+        });
+        
+        document.querySelector('.buy-now-btn').addEventListener('click', function() {
+            const quantity = quantityInput.value;
+            alert(`${quantity} buku Core Java ditambahkan ke keranjang!`);
+        });
+        
+        document.querySelectorAll('.chat-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                if(this.textContent.includes('Chat')) {
+                    alert('Membuka chat dengan penjual Budi_SI2020...');
+                } else {
+                    alert('Membuka form ulasan untuk Core Java...');
+                }
+            });
+        });
+        
+        // Tawar menawar button
+        document.querySelector('.wishlist-btn[style*="flex: 1"]').addEventListener('click', function() {
+            const currentPrice = 285000;
+            const offer = prompt(`Ajukan penawaran untuk Core Java (Harga saat ini: Rp ${currentPrice.toLocaleString()})`, currentPrice - 25000);
+            if (offer) {
+                alert(`Penawaran Rp ${parseInt(offer).toLocaleString()} telah dikirim ke penjual!`);
+            }
+        });
+    </script>
+</body>
+</html>
